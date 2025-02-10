@@ -1,12 +1,14 @@
 {
   "name": "test-app",
   "version": "0.0.0",
+  "main": "electron/main.electron.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-electron": "tsc electron/main.electron.ts",
-    "electron": "npm run build && npm run build-electron && electron electron/main.electron.js",
+    "electron": "electron .",
+    "electron-build": "tsc electron/main.electron.ts && ng build && electron .",
+    "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=release-builds",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:test-app": "node dist/test-app/server/server.mjs"
@@ -23,6 +25,7 @@
     "@angular/platform-server": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@angular/ssr": "^19.1.6",
+    "electron-packager": "^17.1.2",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

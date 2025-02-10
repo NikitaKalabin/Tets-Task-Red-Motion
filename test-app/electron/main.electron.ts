@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import * as path from 'path';
 
 function createWindow() {
@@ -9,10 +9,24 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      partition: 'persist:myapp'
     }
   });
   
-  win.loadFile(path.join(__dirname, '../browser/browser/index.html'));
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Access-Control-Allow-Origin': ['*'],
+        'Access-Control-Allow-Credentials': ['true']
+      }
+    });
+  });
+  
+  win.loadFile(path.join(__dirname, '../dist/test-app/browser/index.html'));
 }
 
 app.whenReady().then(createWindow);

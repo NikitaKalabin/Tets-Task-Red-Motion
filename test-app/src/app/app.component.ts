@@ -12,42 +12,44 @@ import { DataService } from './data.service';
 })
 export class AppComponent implements OnInit {
   title = 'test-app';
-  digit: string = '';         // input value
-  savedDigit: string = '';    // stored digit from database for display
+  digit: string = '';
+  savedDigit: string = '';
   isInputEnabled: boolean = false;
   isDigitStored: boolean = false;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.dataService.getItems((err, rows) => {
-      if (err) {
-        console.error('Failed to fetch digit from database', err);
-        return;
-      }
+    this.loadDigit();
+  }
+
+  async loadDigit(): Promise<void> {
+    try {
+      const rows = await this.dataService.getItems();
       if (rows.length > 0) {
         this.savedDigit = rows[0].name;
         this.isDigitStored = true;
       }
-    });
+    } catch (err) {
+      console.error('Failed to fetch digit from database', err);
+    }
+  }
+
+  async saveDigit(): Promise<void> {
+    if (this.digit) {
+      try {
+        await this.dataService.addItem(this.digit);
+        this.savedDigit = this.digit;
+        this.isDigitStored = true;
+        this.isInputEnabled = false;
+      } catch (err) {
+        console.error('Failed to save digit to database', err);
+      }
+    }
   }
 
   enableInput(): void {
     this.isInputEnabled = true;
-  }
-
-  saveDigit(): void {
-    if (this.digit) {
-      this.dataService.addItem(this.digit, (err) => {
-        if (err) {
-          console.error('Failed to save digit to database', err);
-          return;
-        }
-        this.savedDigit = this.digit;
-        this.isDigitStored = true;
-        this.isInputEnabled = false;
-      });
-    }
   }
 
   changeDigit(): void {

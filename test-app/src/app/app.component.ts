@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DataService } from './data.service';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-root',
@@ -16,26 +18,26 @@ export class AppComponent implements OnInit {
   isInputEnabled: boolean = false;
   isDigitStored: boolean = false;
 
-  ngOnInit(): void {
-    if (typeof document !== 'undefined') {
-      const storedDigit = this.getCookie('storedDigit');
-      if (storedDigit) {
-        this.savedDigit = storedDigit;
-        this.isDigitStored = true;
-      }
-    }
+  constructor(private dataService: DataService) {
+  }
+  async ngOnInit(): Promise<void> {
+    await this.dataService.initializePlugin();
+    this.loadDigits();
   }
 
   enableInput(): void {
     this.isInputEnabled = true;
   }
 
-  saveDigit(): void {
-    if (this.digit && typeof document !== 'undefined') {
-      document.cookie = `storedDigit=${this.digit}; path=/;`;
+  async saveDigit(): Promise<void> {
+    if (this.digit) {
+      await this.dataService.saveDigit(this.digit);
       this.savedDigit = this.digit;
       this.isDigitStored = true;
       this.isInputEnabled = false;
+      console.log('Digit saved:', this.digit);
+    } else {
+      console.log('No digit to save');
     }
   }
 
@@ -43,10 +45,16 @@ export class AppComponent implements OnInit {
     this.isInputEnabled = true;
   }
 
-  private getCookie(name: string): string | undefined {
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
+  private async loadDigits(): Promise<void> {
+
+    const digits = await this.dataService.getDigits();
+    console.log('Loaded digits:', digits);
+    if (digits.length > 0) {
+      this.savedDigit = digits[0];
+      this.isDigitStored = true;
+      console.log('Loaded digits:', digits);
+    } else {
+      console.log('No digits found');
+    }
   }
 }

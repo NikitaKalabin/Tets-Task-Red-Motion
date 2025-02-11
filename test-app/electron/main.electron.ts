@@ -7,23 +7,8 @@ function createWindow() {
     width: 1280,
     height: 720,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      webSecurity: true,
-      allowRunningInsecureContent: false,
-      partition: 'persist:myapp'
+      nodeIntegration: true
     }
-  });
-  
-
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Access-Control-Allow-Origin': ['*'],
-        'Access-Control-Allow-Credentials': ['true']
-      }
-    });
   });
   
   win.loadFile(path.join(__dirname, '../dist/test-app/browser/index.html'));

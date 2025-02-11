@@ -1,0 +1,21 @@
+<main class="container">
+  <h1>Test app</h1>
+  <div class="input-group">
+    <input type="number" [disabled]="!isInputEnabled" [(ngModel)]="digit" placeholder="Введите цифру" />
+  </div>
+  <div class="button-group">
+    <button (click)="enableInput()" [disabled]="isDigitStored">
+      Внести цифру
+    </button>
+    <button (click)="saveDigit()" [disabled]="!isInputEnabled || !digit">
+      Сохранить
+    </button>
+    <button (click)="changeDigit()" [disabled]="!isDigitStored">
+      Изменить
+    </button>
+  </div>
+  <div class="saved-digit">
+    <p>Сохраненная цифра: <strong>{{ savedDigit }}</strong></p>
+  </div>
+  <router-outlet></router-outlet>
+</main>

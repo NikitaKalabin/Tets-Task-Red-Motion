@@ -1,0 +1,79 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 98vh;
+  background: #f9f9f9;
+  text-align: center;
+  padding: 0;
+}
+
+h1 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  border: 2px solid #ffa500;
+  border-radius: 4px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* При фокусе input получает более яркий оранжевый эффект */
+.input-group input:focus {
+  outline: none;
+  border-color: #ff8c00;
+  box-shadow: 0 0 5px rgba(255, 140, 0, 0.7);
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button-group button {
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  border: 2px solid #ffa500;
+  background-color: white;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.button-group button:hover {
+  background-color: #ffa500;
+  color: white;
+}
+
+.button-group button:disabled {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.saved-digit {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+}
